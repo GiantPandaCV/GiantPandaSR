@@ -1,0 +1,7 @@
+test_iter: 556
+test_interval: 500
+base_lr: 0.0001
+momentum: 0.9
+weight_decay: 0
+lr_policy: fixed
+max_iter: 15000000
