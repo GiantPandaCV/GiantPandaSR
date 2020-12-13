@@ -1,0 +1,51 @@
+import torch
+import torch.utils.data as data
+import os
+from torch.utils.data import Dataset
+import torchvision.transforms as transforms
+
+
+class PairedSRDataset(Dataset):
+    def __init__(self, folder_path, mode="train"):
+        """
+        The Paired SR Dataloader should follow the dir of GT and LR
+        :param folder_path: The root folder path for LRs & GTs
+        :param mode: The mode indicates the train_Val split
+        """
+        self.folder_path = folder_path
+        self.mode = mode
+        self.input_transform = transforms.Compose([
+            transforms.ToTensor()
+        ])
+
+        self.GT_path = os.path.join(self.folder_path, "GT")
+        self.LR_path = os.path.join(self.folder_path, "LR")
+
+    def _check_integrity(self, gt_path, lr_path):
+        '''
+        Check the integrity of Dataset Dir. The dir should follow the structure as follows:
+        -Dataset_name
+        |--gt_path
+        |---img.jpeg
+        |--lr_path
+        |---img.jpeg
+
+        :param gt_path:
+        :param lr_path:
+        :return:
+        '''
+
+        gt_path = self.GT_path
+        lr_path = self.LR_path
+
+        img_extension = ['.jpg', '.png', '.JPG', '.PNG', '.jpeg', '.JPEG']
+        for files in os.listdir(gt_path):
+            lr_img_path = os.path.join(lr_path, files)
+
+            if os.path.exists(lr_img_path):
+                return True
+            else:
+                # TODO: To support filename with "_x{}.format(upscale_Factor)"
+                pass
+
+
